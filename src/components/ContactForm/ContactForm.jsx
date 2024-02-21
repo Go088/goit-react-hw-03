@@ -1,24 +1,26 @@
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import css from "./ContactForm.module.css";
 
-const ContactForm = () => {
-  const initialValues = {
-    name: "",
-    number: "",
-  };
-
-  const handleSubmit = (values, actions) => {
-    console.log(values);
-    actions.resetForm();
-  };
-
+const ContactForm = ({ initialValues, onSubmit, validationSchema }) => {
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+    >
       <Form className={css.wrapForm}>
-        <label htmlFor="username">Name</label>
-        <Field className={css.input} type="text" name="name" id="username" />
-        <label htmlFor="phone">Number</label>
-        <Field className={css.input} type="tel" name="number" id="phone" />
+        <label className={css.label}>
+          Name
+          <Field className={css.input} type="text" name="name" />
+          <ErrorMessage className={css.error} name="name" component="div" />
+        </label>
+
+        <label className={css.label}>
+          Number
+          <Field className={css.input} type="tel" name="number" />
+          <ErrorMessage className={css.error} name="number" component="div" />
+        </label>
+
         <button className={css.button} type="submit">
           Ad contact
         </button>
