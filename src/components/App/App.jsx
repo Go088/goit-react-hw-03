@@ -13,7 +13,7 @@ const getCurrentContacts = () => {
 
 export const App = () => {
   const [inputValue, setInputValue] = useState("");
-  const [contactList, setContactList] = useState(getCurrentContacts);
+  const [contactList, setContactList] = useState(initialContacts);
 
   useEffect(() => {
     localStorage.setItem("current-contacts", JSON.stringify(contactList));
