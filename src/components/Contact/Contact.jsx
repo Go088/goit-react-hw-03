@@ -2,21 +2,22 @@ import css from "./Contact.module.css";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 
-export default function Contact({ name, number }) {
+export default function Contact({ id, name, number, deleteContact }) {
   return (
     <div className={css.listItem}>
-      <div className={css.infoBlock}>
-        <div className={css.wrap}>
+      <ul className={css.infoBlock}>
+        <li className={css.wrap}>
           <FaUser />
           <p>{name}</p>
-        </div>
-        <div className={css.wrap}>
+        </li>
+        <li className={css.wrap}>
           <FaPhoneAlt />
           <p>{number}</p>
-        </div>
-      </div>
-
-      <button className={css.button}>Delete</button>
+        </li>
+      </ul>
+      <button className={css.button} onClick={deleteContact} id={id}>
+        Delete
+      </button>
     </div>
   );
 }

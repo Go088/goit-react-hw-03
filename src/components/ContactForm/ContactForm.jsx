@@ -1,12 +1,30 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import css from "./ContactForm.module.css";
+import * as Yup from "yup";
 
-const ContactForm = ({ initialValues, onSubmit, validationSchema }) => {
+const FeedbackSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, "To Short!")
+    .max(50, "To Long!")
+    .required("Required"),
+  number: Yup.string()
+    .required("Required")
+    .matches(
+      /^\d{3}-\d{2}-\d{2}$/,
+      "Phone number must be in the format XXX-XX-XX"
+    ),
+});
+
+const ContactForm = ({ onSubmit }) => {
+  const initialValues = {
+    name: "",
+    number: "",
+  };
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
-      validationSchema={validationSchema}
+      validationSchema={FeedbackSchema}
     >
       <Form className={css.wrapForm}>
         <label className={css.label}>

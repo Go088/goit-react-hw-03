@@ -1,12 +1,17 @@
 import Contact from "../Contact/Contact";
 import css from "./ContactList.module.css";
 
-export default function ContactList({ list }) {
+export default function ContactList({ searchContact, deleteContact }) {
   return (
     <ul className={css.list}>
-      {list.map(({ id, name, number }) => (
+      {searchContact.map(({ id, name, number }) => (
         <li key={id}>
-          <Contact name={name} number={number} />
+          <Contact
+            id={id}
+            name={name}
+            number={number}
+            deleteContact={deleteContact}
+          />
         </li>
       ))}
     </ul>

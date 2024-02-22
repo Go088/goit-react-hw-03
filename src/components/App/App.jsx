@@ -1,67 +1,53 @@
 import ContactForm from "../ContactForm/ContactForm";
 import ContactList from "../ContactList/ContactList";
 import SearchBox from "../SearchBox/SearchBox";
-import css from "./App.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
-import * as Yup from "yup";
+import initialContacts from "../initialContacts.json";
+import css from "./App.module.css";
 
-const currentContacts = [
-  { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-  { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-  { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-  { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-];
+const getCurrentContacts = () => {
+  const savedContacts = localStorage.getItem("current-contacts");
+  return savedContacts !== null ? JSON.parse(savedContacts) : initialContacts;
+};
 
 export const App = () => {
   const [inputValue, setInputValue] = useState("");
-  const [contact, setContact] = useState(currentContacts);
+  const [contactList, setContactList] = useState(getCurrentContacts);
+
+  useEffect(() => {
+    localStorage.setItem("current-contacts", JSON.stringify(contactList));
+  }, [contactList]);
 
   const handleChange = (evt) => {
     setInputValue(evt.target.value);
   };
 
-  const initialValues = {
-    name: "",
-    number: "",
-  };
-
-  const handleSubmit = (values, actions) => {
-    const newContact = {
-      id: nanoid(5),
-      name: values.name,
-      number: values.number,
-    };
-    setContact(currentContacts.push(newContact));
-    actions.resetForm();
-  };
-
-  const filteredContact = currentContacts.filter((contact) =>
+  const filteredContact = contactList.filter((contact) =>
     contact.name.toLocaleLowerCase().includes(inputValue.toLowerCase())
   );
 
-  const FeedbackSchema = Yup.object().shape({
-    name: Yup.string()
-      .min(3, "To Short!")
-      .max(50, "To Long!")
-      .required("Required"),
-    number: Yup.string().required("Required"),
-    // .matches(
-    //   /^\d{3}-\d{2}-\d{2}$/,
-    //   "Phone number must be in the format XXX-XX-XX"
-    // ),
-  });
+  const handleSubmit = (values, actions) => {
+    values.id = nanoid();
+    setContactList([...contactList, values]);
+    actions.resetForm();
+  };
+
+  const handleDeleteContact = (evt) => {
+    setContactList(
+      contactList.filter((contact) => contact.id !== evt.target.id)
+    );
+  };
 
   return (
     <div className={css.container}>
       <h1>Phonebook</h1>
-      <ContactForm
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        validationSchema={FeedbackSchema}
-      />
+      <ContactForm onSubmit={handleSubmit} />
       <SearchBox value={inputValue} onChange={handleChange} />
-      <ContactList list={filteredContact} />
+      <ContactList
+        searchContact={filteredContact}
+        deleteContact={handleDeleteContact}
+      />
     </div>
   );
 };
