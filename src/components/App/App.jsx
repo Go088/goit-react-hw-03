@@ -27,9 +27,21 @@ export const App = () => {
     contact.name.toLocaleLowerCase().includes(inputValue.toLowerCase())
   );
 
-  const handleSubmit = (values, actions) => {
-    values.id = nanoid();
-    setContactList([...contactList, values]);
+  // const handleSubmit = (values, actions) => {
+  //   values.id = nanoid();
+  //   setContactList([...contactList, values]);
+  //   actions.resetForm();
+  // };
+
+  const addContact = (values, actions) => {
+    const newContact = {
+      id: nanoid(),
+      name: values.name,
+      number: values.number,
+    };
+    setContactList((prevContacts) => {
+      return [...prevContacts, newContact];
+    });
     actions.resetForm();
   };
 
@@ -42,7 +54,7 @@ export const App = () => {
   return (
     <div className={css.container}>
       <h1>Phonebook</h1>
-      <ContactForm onSubmit={handleSubmit} />
+      <ContactForm onSubmit={addContact} />
       <SearchBox value={inputValue} onChange={updateSearchFilter} />
       <ContactList
         searchContact={filteredContacts}
