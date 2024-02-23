@@ -7,12 +7,11 @@ const FeedbackSchema = Yup.object().shape({
     .min(3, "To Short!")
     .max(50, "To Long!")
     .required("Required"),
-  number: Yup.string()
-    .required("Required")
-    .matches(
-      /^\d{3}-\d{2}-\d{2}$/,
-      "Phone number must be in the format XXX-XX-XX"
-    ),
+  number: Yup.string().required("Required"),
+  // .matches(
+  //   /^\d{3}-\d{2}-\d{2}$/,
+  //   "Phone number must be in the format XXX-XX-XX"
+  // ),
 });
 
 const ContactForm = ({ onSubmit }) => {
@@ -40,7 +39,7 @@ const ContactForm = ({ onSubmit }) => {
         </label>
 
         <button className={css.button} type="submit">
-          Ad contact
+          Add contact
         </button>
       </Form>
     </Formik>

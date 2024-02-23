@@ -19,11 +19,11 @@ export const App = () => {
     localStorage.setItem("current-contacts", JSON.stringify(contactList));
   }, [contactList]);
 
-  const handleChange = (evt) => {
+  const updateSearchFilter = (evt) => {
     setInputValue(evt.target.value);
   };
 
-  const filteredContact = contactList.filter((contact) =>
+  const filteredContacts = contactList.filter((contact) =>
     contact.name.toLocaleLowerCase().includes(inputValue.toLowerCase())
   );
 
@@ -43,9 +43,9 @@ export const App = () => {
     <div className={css.container}>
       <h1>Phonebook</h1>
       <ContactForm onSubmit={handleSubmit} />
-      <SearchBox value={inputValue} onChange={handleChange} />
+      <SearchBox value={inputValue} onChange={updateSearchFilter} />
       <ContactList
-        searchContact={filteredContact}
+        searchContact={filteredContacts}
         deleteContact={handleDeleteContact}
       />
     </div>
